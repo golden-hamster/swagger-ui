@@ -1,0 +1,579 @@
+---
+openapi: 3.0.1
+info:
+  title: 일정 관리
+  description: 내배캠 숙련주차 개인과제
+  version: v1.0.0
+servers:
+- url: http://localhost:8080
+  description: Generated server url
+tags:
+- name: 일정
+  description: 일정 관련 API
+paths:
+  "/api/users/{userId}":
+    get:
+      tags:
+      - user-controller
+      summary: 유저 조회
+      operationId: findUser
+      parameters:
+      - name: userId
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      responses:
+        '200':
+          description: OK
+          content:
+            "*/*":
+              schema:
+                "$ref": "#/components/schemas/UserResponse"
+    put:
+      tags:
+      - user-controller
+      summary: 유저 수정
+      operationId: updateUser
+      parameters:
+      - name: userId
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      - name: userUpdateRequest
+        in: query
+        required: true
+        schema:
+          "$ref": "#/components/schemas/UserUpdateRequest"
+      responses:
+        '200':
+          description: OK
+    delete:
+      tags:
+      - user-controller
+      summary: 유저 삭제
+      operationId: deleteUser
+      parameters:
+      - name: userId
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      - name: userDeleteRequest
+        in: query
+        required: true
+        schema:
+          "$ref": "#/components/schemas/UserDeleteRequest"
+      responses:
+        '200':
+          description: OK
+  "/api/schedules/{scheduleId}":
+    get:
+      tags:
+      - 일정
+      summary: 일정 단건 조회
+      operationId: findSchedule
+      parameters:
+      - name: scheduleId
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      responses:
+        '200':
+          description: OK
+          content:
+            "*/*":
+              schema:
+                "$ref": "#/components/schemas/ScheduleResponse"
+    put:
+      tags:
+      - 일정
+      summary: 일정 수정
+      operationId: updateSchedule
+      parameters:
+      - name: scheduleId
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      - name: authInfo
+        in: query
+        required: true
+        schema:
+          "$ref": "#/components/schemas/AuthInfo"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              "$ref": "#/components/schemas/ScheduleUpdateRequest"
+        required: true
+      responses:
+        '200':
+          description: OK
+    delete:
+      tags:
+      - 일정
+      summary: 일정 삭제
+      operationId: deleteSchedule
+      parameters:
+      - name: scheduleId
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      - name: authInfo
+        in: query
+        required: true
+        schema:
+          "$ref": "#/components/schemas/AuthInfo"
+      responses:
+        '200':
+          description: OK
+  "/api/comments/{commentId}":
+    get:
+      tags:
+      - comment-controller
+      summary: 댓글 단건 조회
+      operationId: findComment
+      parameters:
+      - name: commentId
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      responses:
+        '200':
+          description: OK
+          content:
+            "*/*":
+              schema:
+                "$ref": "#/components/schemas/CommentResponse"
+    put:
+      tags:
+      - comment-controller
+      summary: 댓글 수정
+      operationId: updateComment
+      parameters:
+      - name: commentId
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      - name: authInfo
+        in: query
+        required: true
+        schema:
+          "$ref": "#/components/schemas/AuthInfo"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              "$ref": "#/components/schemas/CommentUpdateRequest"
+        required: true
+      responses:
+        '200':
+          description: OK
+    delete:
+      tags:
+      - comment-controller
+      summary: 댓글 삭제
+      operationId: deleteComment
+      parameters:
+      - name: commentId
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      - name: authInfo
+        in: query
+        required: true
+        schema:
+          "$ref": "#/components/schemas/AuthInfo"
+      responses:
+        '200':
+          description: OK
+  "/api/users":
+    get:
+      tags:
+      - user-controller
+      summary: 모든 유저 조회
+      operationId: findUsers
+      responses:
+        '200':
+          description: OK
+          content:
+            "*/*":
+              schema:
+                "$ref": "#/components/schemas/UserListResponse"
+    post:
+      tags:
+      - user-controller
+      summary: 유저 생성
+      operationId: createUser
+      requestBody:
+        content:
+          application/json:
+            schema:
+              "$ref": "#/components/schemas/UserCreateRequest"
+        required: true
+      responses:
+        '200':
+          description: OK
+  "/api/users/login":
+    post:
+      tags:
+      - user-controller
+      summary: 로그인 요청
+      operationId: login
+      requestBody:
+        content:
+          application/json:
+            schema:
+              "$ref": "#/components/schemas/LoginRequest"
+        required: true
+      responses:
+        '200':
+          description: OK
+          content:
+            "*/*":
+              schema:
+                "$ref": "#/components/schemas/UserResponse"
+  "/api/schedules":
+    get:
+      tags:
+      - 일정
+      summary: 일정 페이징 후 조회
+      operationId: findSchedules
+      parameters:
+      - name: pageable
+        in: query
+        required: true
+        schema:
+          "$ref": "#/components/schemas/Pageable"
+      responses:
+        '200':
+          description: OK
+          content:
+            "*/*":
+              schema:
+                "$ref": "#/components/schemas/ScheduleListResponse"
+    post:
+      tags:
+      - 일정
+      summary: 일정 생성
+      operationId: createSchedule
+      parameters:
+      - name: authInfo
+        in: query
+        required: true
+        schema:
+          "$ref": "#/components/schemas/AuthInfo"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              "$ref": "#/components/schemas/ScheduleCreateRequest"
+        required: true
+      responses:
+        '200':
+          description: OK
+  "/api/schedules/{scheduleId}/comments":
+    get:
+      tags:
+      - comment-controller
+      summary: 해당 게시글의 모든 댓글 조회
+      operationId: findComments
+      parameters:
+      - name: scheduleId
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      responses:
+        '200':
+          description: OK
+          content:
+            "*/*":
+              schema:
+                "$ref": "#/components/schemas/CommentListResponse"
+    post:
+      tags:
+      - comment-controller
+      summary: 댓글 생성
+      operationId: createComment
+      parameters:
+      - name: scheduleId
+        in: path
+        required: true
+        schema:
+          type: integer
+          format: int64
+      - name: authInfo
+        in: query
+        required: true
+        schema:
+          "$ref": "#/components/schemas/AuthInfo"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              "$ref": "#/components/schemas/CommentCreateRequest"
+        required: true
+      responses:
+        '200':
+          description: OK
+components:
+  schemas:
+    UserUpdateRequest:
+      type: object
+      properties:
+        username:
+          type: string
+        email:
+          type: string
+        password:
+          type: string
+    ScheduleUpdateRequest:
+      type: object
+      properties:
+        title:
+          type: string
+        content:
+          type: string
+        managerIdList:
+          type: array
+          items:
+            type: integer
+            format: int64
+    AuthInfo:
+      type: object
+      properties:
+        userId:
+          type: integer
+          format: int64
+        email:
+          type: string
+        role:
+          type: string
+          enum:
+          - ADMIN
+          - USER
+    CommentUpdateRequest:
+      type: object
+      properties:
+        content:
+          type: string
+    UserCreateRequest:
+      type: object
+      properties:
+        username:
+          type: string
+        email:
+          type: string
+        password:
+          type: string
+        admin:
+          type: boolean
+        adminToken:
+          type: string
+    LoginRequest:
+      type: object
+      properties:
+        email:
+          type: string
+        password:
+          type: string
+    UserResponse:
+      type: object
+      properties:
+        userId:
+          type: integer
+          format: int64
+        username:
+          type: string
+        email:
+          type: string
+        createdAt:
+          type: string
+        modifiedAt:
+          type: string
+    ScheduleCreateRequest:
+      type: object
+      properties:
+        title:
+          type: string
+        content:
+          type: string
+        managerIdList:
+          type: array
+          items:
+            type: integer
+            format: int64
+    CommentCreateRequest:
+      type: object
+      properties:
+        content:
+          type: string
+    UserListResponse:
+      type: object
+      properties:
+        userResponses:
+          type: array
+          items:
+            "$ref": "#/components/schemas/UserResponse"
+    Pageable:
+      type: object
+      properties:
+        page:
+          minimum: 0
+          type: integer
+          format: int32
+        size:
+          minimum: 1
+          type: integer
+          format: int32
+        sort:
+          type: array
+          items:
+            type: string
+    Manager:
+      type: object
+      properties:
+        username:
+          type: string
+        email:
+          type: string
+    PageScheduleResponse:
+      type: object
+      properties:
+        totalElements:
+          type: integer
+          format: int64
+        totalPages:
+          type: integer
+          format: int32
+        size:
+          type: integer
+          format: int32
+        content:
+          type: array
+          items:
+            "$ref": "#/components/schemas/ScheduleResponse"
+        number:
+          type: integer
+          format: int32
+        sort:
+          type: array
+          items:
+            "$ref": "#/components/schemas/SortObject"
+        first:
+          type: boolean
+        last:
+          type: boolean
+        numberOfElements:
+          type: integer
+          format: int32
+        pageable:
+          "$ref": "#/components/schemas/PageableObject"
+        empty:
+          type: boolean
+    PageableObject:
+      type: object
+      properties:
+        offset:
+          type: integer
+          format: int64
+        sort:
+          type: array
+          items:
+            "$ref": "#/components/schemas/SortObject"
+        paged:
+          type: boolean
+        pageNumber:
+          type: integer
+          format: int32
+        pageSize:
+          type: integer
+          format: int32
+        unpaged:
+          type: boolean
+    ScheduleListResponse:
+      type: object
+      properties:
+        scheduleResponses:
+          "$ref": "#/components/schemas/PageScheduleResponse"
+    ScheduleResponse:
+      type: object
+      properties:
+        scheduleId:
+          type: integer
+          format: int64
+        title:
+          type: string
+        content:
+          type: string
+        createdAt:
+          type: string
+        modifiedAt:
+          type: string
+        username:
+          type: string
+        email:
+          type: string
+        weather:
+          type: string
+        managers:
+          type: array
+          items:
+            "$ref": "#/components/schemas/Manager"
+    SortObject:
+      type: object
+      properties:
+        direction:
+          type: string
+        nullHandling:
+          type: string
+        ascending:
+          type: boolean
+        property:
+          type: string
+        ignoreCase:
+          type: boolean
+    CommentListResponse:
+      type: object
+      properties:
+        commentResponses:
+          type: array
+          items:
+            "$ref": "#/components/schemas/CommentResponse"
+    CommentResponse:
+      type: object
+      properties:
+        commentId:
+          type: integer
+          format: int64
+        content:
+          type: string
+        createdAt:
+          type: string
+        modifiedAt:
+          type: string
+        username:
+          type: string
+    UserDeleteRequest:
+      type: object
+      properties:
+        password:
+          type: string
